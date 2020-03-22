@@ -51,6 +51,23 @@ class LoginSerializer(serializers.Serializer):
 class UserPostSerializer(serializers.ModelSerializer):
 
     class Meta:
+
         model = UserPost
-        fields = ('id', 'post_title', 'post_description', 'post_image', 'is_active', 'user',)
-        read_only_fields = ('id', 'user', 'is_active', 'post_image',)
+
+        fields = (
+            'id',
+            'post_title',
+            'post_description',
+            'post_image',
+            'is_active',
+            'user',
+            'creation_date',
+            'update_date',
+        )
+        read_only_fields = (
+            'id',
+            'user',
+            'is_active',
+            'post_image',
+            'creation_date',
+        )

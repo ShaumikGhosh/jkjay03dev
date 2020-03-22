@@ -67,28 +67,39 @@ class CreatePost(APIView):
 
 class UpdatePost(APIView):
 
-    def get_object(self, id, user):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+
+    def get_object(self, pk, user):
         try:
-            return UserPost.objects.get(id=id, user=user)
+            return UserPost.objects.get(pk=pk, user=user)
         except UserPost.DoesNotExist:
             raise Http404
 
-    def get(self, request, id):
-        post = self.get_object(id, request.user)
-        serializer = UserPostSerializer(post)
+    def get(self, request, pk):
+        data = self.get_object(pk, request.user)
+        serializer = UserPostSerializer(data)
         return Response(serializer.data)
 
-    def put(self, request, id):
-        post = self.get_object(id, request.user)
+    def put(self, request, pk):
+        post = self.get_object(pk, request.user)
         serializer = UserPostSerializer(post, data=request.data)
 
         try:
             image = request.data['post_image']
         except Exception:
             image = None
+        is_active = request.data['is_active']
 
         if serializer.is_valid():
-            serializer.save(user=request.user, post_image=image)
-            message = "Data successfully inserted!"
+            serializer.save(post_image=image, is_active=is_active)
+            message = "Data successfully updated!"
             return Response({"message": message})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        data = self.get_object(pk, request.user)
+        data.delete()
+        message = "Your post is deleted!"
+        return Response({"message":message})
