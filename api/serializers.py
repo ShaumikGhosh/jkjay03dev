@@ -4,7 +4,6 @@ from api.models import UserPost
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
-from datetime import date, datetime
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -53,29 +52,5 @@ class UserPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserPost
-        fields = (
-            'id',
-            'post_title',
-            'post_description',
-            'post_image',
-            'is_active',
-            'creation_date',
-            'creation_time',
-            'update_date',
-            'update_time',
-            'user',
-        )
-        read_only_fields = ('id', 'user', 'update_date', 'update_time')
-
-    def create(self, validated_data):
-        post = UserPost(
-            post_title=validated_data['post_title'],
-            post_description=validated_data['post_description'],
-            post_image=validated_data['post_image'],
-            is_active=True,
-            creation_date=date.today(),
-            creation_time=datetime.now(),
-        )
-        post.save()
-
-        return post
+        fields = ('id', 'post_title', 'post_description', 'post_image', 'is_active', 'user',)
+        read_only_fields = ('id', 'user', 'is_active', 'post_image',)

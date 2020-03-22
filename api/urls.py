@@ -4,9 +4,11 @@ from api import views
 
 
 urlpatterns = [
-    path('register/', views.SignupUser.as_view(), name='signup'),
-    path('login/', views.LoginUser.as_view(), name='login_user'),
-    path('logout/', views.LogoutUser.as_view(), name='logout_user'),
+    path('api/v1/register/', views.SignupUser.as_view()),
+    path('api/v1/login/', views.LoginUser.as_view()),
+    path('api/v1/logout/', views.LogoutUser.as_view()),
+    path('api/v1/create-post/', views.CreatePost.as_view()),
+    path('api/v1/get-single-post-data/<int:id>/', views.UpdatePost.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
