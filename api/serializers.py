@@ -38,10 +38,13 @@ class LoginSerializer(serializers.Serializer):
 
         if username and password:
             user = authenticate(username=username, password=password)
-            if user.is_active.__eq__(bool(True)):
-                data['user'] = user
+            if user:
+                if user.is_active.__eq__(bool(True)):
+                    data['user'] = user
+                else:
+                    raise ValidationError("Account is suspended!")
             else:
-                raise ValidationError("Account is suspended!")
+                raise ValidationError("Username/Password not found!")
         else:
             raise ValidationError("Credentials are required!")
 

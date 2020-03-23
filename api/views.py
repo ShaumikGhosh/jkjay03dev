@@ -49,6 +49,11 @@ class CreatePost(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
 
+    def get(self, request, format=None):
+        posts = UserPost.objects.all()
+        serializer = UserPostSerializer(posts, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
 
         serializer = UserPostSerializer(data=request.data)
